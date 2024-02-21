@@ -2,29 +2,32 @@ package com.test.exam;
 
 public class ApplicationDemo {
 
-    private Integer applePrice = 8;
-    private Integer stawberryPrice = 13;
-    private Integer mangoPrice = 20;
+    private long applePrice = 8l;
+    private long stawberryPrice = 13l;
+    private long mangoPrice = 20l;
 
     public static void main(String[] args) {
 
         ApplicationDemo run = new ApplicationDemo();
 
         // 第一题结果
-        int firstTotalPrices = run.firstQuestion(5, 3);
+        long firstTotalPrices = run.firstQuestion(5, 3);
         System.out.println("A 购买的水果斤数总价："+firstTotalPrices);
 
         // 第二题结果
-        int secondTotalPrices = run.secondQuestion(5, 3,4);
+        long secondTotalPrices = run.secondQuestion(5, 3,4);
         System.out.println("B 购买的水果斤数总价："+secondTotalPrices);
 
         // 第三题结果
-        Double thirdTotalPrices = run.thirdQuestion(5, 3,4);
+        double thirdTotalPrices = run.thirdQuestion(5, 3,4);
         System.out.println("C 购买的水果斤数总价："+thirdTotalPrices);
 
         // 第四题结果
-        Double fourthTotalPrices = run.fourthQuestion(5, 3,4);
+        double fourthTotalPrices = run.fourthQuestion(5, 3,4);
         System.out.println("D 购买的水果斤数总价："+fourthTotalPrices);
+
+
+        System.out.println(Math.floor(610.1/100));
 
 
     }
@@ -36,7 +39,10 @@ public class ApplicationDemo {
      * 请编写函数，对于 A 购买的水果斤数 (水果斤数为大于等于 0 的整数)，计算并返回所购买商品的总价。
      * @return
      */
-    public int firstQuestion(int appleWeight, int stawberryWeight) {
+    public long firstQuestion(int appleWeight, int stawberryWeight) {
+        if (appleWeight < 0 || stawberryWeight < 0) {
+            throw new Error("苹果跟草莓的重量必须大于等于0");
+        }
         return appleWeight * applePrice + stawberryWeight * stawberryPrice;
     }
 
@@ -47,8 +53,11 @@ public class ApplicationDemo {
      * 请编写函数，对于 B 购买的水果斤数 (水果斤数为大于等于 0 的整数)，计算并返回所购买商品的总价。
      * @return
      */
-    public int secondQuestion (int appleWeight, int strawbeeryWeight, int mangoWeight) {
-        return firstQuestion(appleWeight,strawbeeryWeight) + mangoWeight * mangoPrice;
+    public long secondQuestion (int appleWeight, int stawberryWeight, int mangoWeight) {
+        if (appleWeight < 0 || stawberryWeight < 0 || mangoWeight < 0) {
+            throw new Error("苹果、草莓、芒果的重量必须大于等于0");
+        }
+        return firstQuestion(appleWeight,stawberryWeight) + mangoWeight * mangoPrice;
     }
 
     /**
@@ -57,7 +66,10 @@ public class ApplicationDemo {
      * 现在顾客 C 在超市购买了若干斤苹果、 草莓和芒果，需计算一共需要多少钱？
      * 请编写函数，对于 C 购买的水果斤数 (水果斤数为大于等于 0 的整数)，计算并返回所购买商品的总价。
      */
-    public Double thirdQuestion (int appleWeight, int stawberryWeight, int mangoWeight) {
+    public double thirdQuestion (int appleWeight, int stawberryWeight, int mangoWeight) {
+        if (appleWeight < 0 || stawberryWeight < 0 || mangoWeight < 0) {
+            throw new Error("苹果、草莓、芒果的重量必须大于等于0");
+        }
         return appleWeight*applePrice + stawberryWeight*stawberryPrice*0.8 + mangoWeight*mangoPrice;
     }
 
@@ -67,10 +79,18 @@ public class ApplicationDemo {
      * 现在顾客 D 在超市购买了若干斤苹果、 草莓和芒果，需计算一共需要多少钱？
      * 请编写函数，对于 D 购买的水果斤数 (水果斤数为大于等于 0 的整数)，计算并返回所购买商品的总价。
      */
-    public Double fourthQuestion (int appleWeight, int stawberryWeight, int mangoWeight) {
-        Double total = thirdQuestion(appleWeight, stawberryWeight, mangoWeight);
-        if (total >= 100) {
-            return total-10;
-        } return total;
+    public double fourthQuestion (int appleWeight, int stawberryWeight, int mangoWeight) {
+        if (appleWeight < 0 || stawberryWeight < 0 || mangoWeight < 0) {
+            throw new Error("苹果、草莓、芒果的重量必须大于等于0");
+        }
+        double total = thirdQuestion(appleWeight, stawberryWeight, mangoWeight);
+        if (total % 100 < 92) {
+            // 根据实际情况，满100减10，一般顾客都会选择分段付费，即如果总价大于200，会选择分两次付款，每次付款的数额都大于100而且还可以得到优惠
+            return Math.floor(total / 100) * 90 + total % 100;
+        } else if (total % 100 >= 92) {
+            // 如果金额差8块以内就会超过100，那么顾客会选择再购买一斤苹果，从而还会得到减10的优惠，即总价会减2元
+            return Math.floor(total / 100) * 90 + total % 100 - 2;
+        }
+        return total;
     }
 }
