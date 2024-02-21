@@ -27,9 +27,6 @@ public class ApplicationDemo {
         System.out.println("D 购买的水果斤数总价："+fourthTotalPrices);
 
 
-        System.out.println(Math.floor(610.1/100));
-
-
     }
 
     /**
